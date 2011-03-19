@@ -1,0 +1,14 @@
+<?php
+
+define('OSB_DB', 'osb');
+define('OSB_DB_HOST', 'localhost');
+define('OSB_DB_UNAME', 'postgres');
+define('OSB_DB_PWORD', '');
+
+define('OSB_MAX_NODES_EXPAND', 3);
+
+# You are at the corner if you are within this many meters
+define('OSB_CORNER_THRESH', 33);
+
+
+?>
