@@ -1,45 +1,83 @@
-1) use osm2pgsql to load the .osm file into PSQL one way:
-osm2pgsql -d DATABASE_NAME -l -s -p osm FILE.osm
-(may also need flags for host, username, password, etc)
+OpenStreetBlock is a simple web service for turning a lat/lon into a block name using OpenStreetMap data.
 
-from this we will use only:
-osm_line
-osm_ways
+http://github.com/fruminator/openstreetblock
+http://transit.frumin.net/openstreetblock
 
+DEPENDENCIES
+-----------------------------------------------------------------------------
+OpenStreetBlock depends on:
+* PostgreSQL
+* PostGIS
+* Apache
+* PHP
+* Osmosis
+* osm2pgsql
+* git (to get the code)
 
-2) use osmosis to load the .osm file intoPSQL another way:
-
-create the schema osmosis looks for (to do this will require the 'hstore' psql module):
-
-cat /usr/share/doc/osmosis/examples/pgsql_simple_schema_0.6.sql | psql DATABASE_NAME
-cat /usr/share/doc/osmosis/examples/pgsql_simple_schema_0.6_linestring.sql | psql
-cat /usr/share/doc/osmosis/examples/pgsql_simple_schema_0.6_bbox.sql |
-
-then import using osmosis:
-
-osmosis --read-xml FILE.osm --write-pgsql database=DATABASE_NAME host=HOST user=USER
-(likewis for more DB flags.  note, osmosis has no flag for DB port)
-
-from this we will use only:
-nodes
-way_nodes
+FGI my friend
 
 
-3) probably want to vacuum analyze the whole thing after importing.
+INSTALLATION
+-----------------------------------------------------------------------------
+1. Install all the above dependencies
+2. Get the code (for read-only download: "git clone git://github.com/fruminator/openstreetblock.git")
+3. In the openstreetblock directory, mv conf.inc.php.default to conf.inc.php
+4. Edit conf.inc.php to reflect your local configuration parameters (especially, your database connection)
+5. Get, process, and load OpenStreetMap data as described below
+6. Send requests to the osb.php script, as described in index.php
+
+
+OPENSTREETMAP DATA
+-----------------------------------------------------------------------------
+1. Get some OpenStreetMap data in raw XML format (i.e. a .osm file).  
+Easiest way is to:
+- Go to http://www.openstreetmap.org/
+- Navigate to a pan/zoom for which you want data
+- Click the "Export" tab
+- Select the OpenStreetMap XML Data option
+- Hit "Export"
+- When this fails, because you have chosen too large a bounding box, copy the bbox=BBOX out of the resulting URL
+- Use this bounding box to request bulk OSM data:
+  wget --timeout=SOME_LARGE_VALUE -O MY_FILE.osm "http://www.informationfreeway.org/api/0.6/map?bbox=BBOX
+- Keep trying this until it eventually works...
+
+
+A reasonable BBOX for New York City (less Staten Island) could be:
+  -74.054,40.54,-73.709,40.92"
+
+So the request could be executed with:
+   wget --timeout=3600 -O nyc.osm "http://www.informationfreeway.org/api/0.6/map?bbox=-74.054,40.54,-73.709,40.92"
 
 
 
-
-this one is a bitch (there is 18th ave): http://transit.frumin.net/mta/oba/osm.php?ll=40.61995,-73.9893&simple=0
-
-
-BBOX for Brooklyn can be:
+2. Create a PostGIS-enabled database in your PostgreSQL instance.
+   Assume henceforth that this database was named 'osb'
 
 
--74.05,40.56
--73.8,40.73
+3. Use osm2pgsql to load the .osm file into PSQL:
+   osm2pgsql -d osb -l -s -p osm MY_FILE.osm
+   (may also need flags for host, username, password, etc)
 
-so API call would be:
-http://api.openstreetmap.org/api/0.6/map?bbox=-74.05,40.56,-73.8,40.73
+   from this we will use only the following tables:
+   	osm_line
+	osm_ways
 
+
+4. Use osmosis to load the .osm file into PSQL another way:
+
+   Create the schema osmosis looks for (to do this will require the 'hstore' psql module):
+   cat /usr/share/doc/osmosis/examples/pgsql_simple_schema_0.6.sql | psql osb
+   cat /usr/share/doc/osmosis/examples/pgsql_simple_schema_0.6_linestring.sql | psql osb
+   cat /usr/share/doc/osmosis/examples/pgsql_simple_schema_0.6_bbox.sql | psql osb
+
+   Then import using osmosis:
+   osmosis --read-xml MY_FILE.osm --write-pgsql database=osb host=HOST user=USER
+   (likewise for more DB flags.  Note, osmosis has no flag for DB port)
+
+   From this we will use only:
+   nodes
+   way_nodes
+
+
+5.  You probably want to VACUUM ANALYZE the whole thing after importing.
 

@@ -47,6 +47,7 @@ if($format == 'json') {
  }
  else if($format == 'rawdata') {
    printf("<PRE>%s</PRE>", print_r($osb, true));
+   #printf("%s", json_encode($osb));
  }
  else {
    printf("%s", osb_simple($osb));
