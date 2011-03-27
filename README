@@ -1,0 +1,45 @@
+1) use osm2pgsql to load the .osm file into PSQL one way:
+osm2pgsql -d DATABASE_NAME -l -s -p osm FILE.osm
+(may also need flags for host, username, password, etc)
+
+from this we will use only:
+osm_line
+osm_ways
+
+
+2) use osmosis to load the .osm file intoPSQL another way:
+
+create the schema osmosis looks for (to do this will require the 'hstore' psql module):
+
+cat /usr/share/doc/osmosis/examples/pgsql_simple_schema_0.6.sql | psql DATABASE_NAME
+cat /usr/share/doc/osmosis/examples/pgsql_simple_schema_0.6_linestring.sql | psql
+cat /usr/share/doc/osmosis/examples/pgsql_simple_schema_0.6_bbox.sql |
+
+then import using osmosis:
+
+osmosis --read-xml FILE.osm --write-pgsql database=DATABASE_NAME host=HOST user=USER
+(likewis for more DB flags.  note, osmosis has no flag for DB port)
+
+from this we will use only:
+nodes
+way_nodes
+
+
+3) probably want to vacuum analyze the whole thing after importing.
+
+
+
+
+this one is a bitch (there is 18th ave): http://transit.frumin.net/mta/oba/osm.php?ll=40.61995,-73.9893&simple=0
+
+
+BBOX for Brooklyn can be:
+
+
+-74.05,40.56
+-73.8,40.73
+
+so API call would be:
+http://api.openstreetmap.org/api/0.6/map?bbox=-74.05,40.56,-73.8,40.73
+
+
