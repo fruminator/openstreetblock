@@ -16,8 +16,8 @@
    * the License.
    */
 
-$ll = "40.671899,-73.984074";
-$res = "4th Avenue between 86th St and 85th St";
+$ll = "40.737813,-73.997887";
+$res = "West 14th Street bet. 6th Ave. & 7th Ave";
 
 $req_dir = sprintf("http://%s%s", $_SERVER[HTTP_HOST], dirname($_SERVER[PHP_SELF]));
 $script = "osb.php";
@@ -30,10 +30,11 @@ $service = sprintf("%s/%s", $req_dir, $script);
 <BODY style="width:1000px;">
 <H1>What is OpenStreetBlock?</H1>
 <p>
-  OpenStreetBlock is a simple web service for mapping a specific latitude/longitude coordinate to an actual city "block" 
+
+  OpenStreetBlock is a web service for turning a given lat/lon coordinate (e.g. <?= $ll ?>)
+  into a textual description of the actual city block to which the coordinate points (e.g. "<?= $res ?>")
   using <a href="http://openstreetmap.org">OpenStreetMap</a> data.
   
-  In other words, turning (<?= $ll ?>) into "<?= $res; ?>."
 </p>
 
 <p>    
@@ -42,12 +43,16 @@ $service = sprintf("%s/%s", $req_dir, $script);
 </p>
 
 <H1>How Does it Work?</H1>
+<a name="concept">
 <H2>The Concept</H2>
-  Conceptually speaking, OpenStreetBlock does the following, given a lat/lon coordinate (40.737813,-73.997887, for example).
+  Conceptually speaking, OpenStreetBlock does the following. 
+
+
+<OL>
+<li> Start with a given lat/lon coordinate (40.737813,-73.997887, for example).
 
 <BR> <img src="docs/example/osb-coord.png"> <BR><BR>
 
-<OL>
 <li>
   Find the street segment ("way" in OpenStreetMap terminology) physically closest to the given coordinate.  
       Assume this is the street we are on: in this case, "14th St."
@@ -78,9 +83,10 @@ $service = sprintf("%s/%s", $req_dir, $script);
 <BR> <img src="docs/example/osb-corner.png"> <BR><BR>
 </OL>
 
+<a name="webservice">
 <H2>The Web Service</H2>
 <p>
-      The OpenStreetBlock will be available wherever/however you install it.
+      The OpenStreetBlock web service will be available wherever/however you install it.
       The entry point to the web service is the <code><?= $script; ?></code> file.
       So, in this case, the web service is at:
   <a href="<?= $service; ?>"><?= $service; ?></a>
@@ -109,6 +115,7 @@ $service = sprintf("%s/%s", $req_dir, $script);
 	<LI>"Raw Data" -- uses the data-dumping features of PHP to show all the relevant raw data of relevance (<code>format=rawdata</code>). </LI>
       </UL>
 </p>
+<a name="examples">
 <H1>Try it Out</H1>
 	Some example searches: 
 	<ul>
@@ -161,6 +168,7 @@ $service = sprintf("%s/%s", $req_dir, $script);
 	</ul>
 
 
+<a name="free">
 <H1>Is it Free?</H1>
 <p>
   Yes!
