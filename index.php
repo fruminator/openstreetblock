@@ -27,7 +27,7 @@ $service = sprintf("%s/%s", $req_dir, $script);
 <HEAD>
 <TITLE>OpenStreetBlock</TITLE>
 </HEAD>
-<BODY style="width:800px;">
+<BODY style="width:1000px;">
 <H1>What is OpenStreetBlock?</H1>
 <p>
   OpenStreetBlock is a simple web service for mapping a specific latitude/longitude coordinate to an actual city "block" 
@@ -43,35 +43,39 @@ $service = sprintf("%s/%s", $req_dir, $script);
 
 <H1>How Does it Work?</H1>
 <H2>The Concept</H2>
-<p>
-  Conceptually speaking, OpenStreetBlock does the following, given a lat/lon coordinate.
-</p>
+  Conceptually speaking, OpenStreetBlock does the following, given a lat/lon coordinate (40.737813,-73.997887, for example).
 
-<?
-#  use 40.737813,-73.997887 as graphical
-?>
+<BR> <img src="docs/example/osb-coord.png"> <BR><BR>
 
 <OL>
 <li>
   Find the street segment ("way" in OpenStreetMap terminology) physically closest to the given coordinate.  
-      Assume this is the street we are on.
+      Assume this is the street we are on: in this case, "14th St."
+<BR> <img src="docs/example/osb-way.png"> <BR><BR>
 </li>
 
 <li>
       Find the two intersections ("nodes" in OpenStreetMap terminology) closest to the given coordinate on the selected street.
       Assume these are the intersections we are between.
+<BR> <img src="docs/example/osb-nodes.png"> <BR><BR>
+
+
 </li>
 
 <li>
       For each of those intersections, find the streets passing through those intersections.
       Exclude any intersecting streets with the same name as the selected street (the one we are "on").
-      Use the remaining streets to name the given intersection (the ones we are "between").
+      Use the remaining streets to name the given intersection (the ones we are "between"):
+      in this case, 6th Avenue and 7th  Avenue.
+<BR> <img src="docs/example/osb-intersecting.png"> <BR><BR>
 </li>
 
 <li>
       OpenStreetBlock also uses a configurable threshold parameter to determine whether we are "at" a given intersecting street rather than "between" two intersections
       (this is the so-called "Corner Threshold").
-      If we are within this threshold of the nearest intersection, drop the other intersection.
+      If we are within this threshold of the nearest intersection, drop the other intersection: 
+      in this case, we are not.
+<BR> <img src="docs/example/osb-corner.png"> <BR><BR>
 </OL>
 
 <H2>The Web Service</H2>
@@ -117,7 +121,7 @@ $service = sprintf("%s/%s", $req_dir, $script);
 	</li>
 
 	<? $ll = "40.704497,-74.013235"; ?>
-	<li>New York City Transit Headquarters
+	<li>New York City Transit headquarters
 	(<a href="http://maps.google.com/?q=<?= $ll; ?>"><?= $ll; ?></a>):
 	<a href="<?= sprintf('%s?ll=%s', $service, $ll);?>">Simple</a>
 	| <a href="<?= sprintf('%s?ll=%s&format=json', $service, $ll);?>">JSON</a>
@@ -136,6 +140,15 @@ $service = sprintf("%s/%s", $req_dir, $script);
 
 	<? $ll = "40.748216,-73.984798"; ?>
 	<li>The Empire State Building
+	(<a href="http://maps.google.com/?q=<?= $ll; ?>"><?= $ll; ?></a>):
+	<a href="<?= sprintf('%s?ll=%s', $service, $ll);?>">Simple</a>
+	| <a href="<?= sprintf('%s?ll=%s&format=json', $service, $ll);?>">JSON</a>
+	| <a href="<?= sprintf('%s?ll=%s&format=debug', $service, $ll);?>">Debug</a>
+	| <a href="<?= sprintf('%s?ll=%s&format=rawdata', $service, $ll);?>">Raw Data</a>
+	</li>
+
+	<? $ll = "40.737813,-73.997887"; ?>
+	<li>The 14th Street example above.
 	(<a href="http://maps.google.com/?q=<?= $ll; ?>"><?= $ll; ?></a>):
 	<a href="<?= sprintf('%s?ll=%s', $service, $ll);?>">Simple</a>
 	| <a href="<?= sprintf('%s?ll=%s&format=json', $service, $ll);?>">JSON</a>
@@ -169,7 +182,9 @@ $service = sprintf("%s/%s", $req_dir, $script);
     are also free and open source.
 </p>
 
-
+<div style="font-size: small; text-align: center; padding-top: 3em;">
+  <a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">OpenStreetBlock Documentation</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://github.com/fruminator/openstreetblock" property="cc:attributionName" rel="cc:attributionURL">Michael  Frumin</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>. Based on a work at <a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/fruminator/openstreetblock" rel="dct:source">github.com</a>.
+</div>
 
 </BODY>
 </HEAD>

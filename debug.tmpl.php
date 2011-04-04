@@ -34,12 +34,12 @@ Closest OSM Way is: <strong><?= $osb[way][name] ?> (<?=$osb[way][osm_id] ?>)</st
 </p>
 
 <p>
-   Which has <?= count($osb[node_ids]) ?> nodes: (<?= join(",", $osb[node_ids]); ?>)
+   Which has <?= count($osb[node_ids]) ?> OSM nodes: (<?= join(",", $osb[node_ids]); ?>)
 </p>
 
 The <?= OSB_MAX_NODES_EXPAND ?> closest nodes are:
 
-FILL IN A BUNCH OF SHIT HERE
+
 
 <p>Final Answer: <strong><?= osb_simple($osb); ?></strong></p>
 
