@@ -39,6 +39,23 @@ Closest OSM Way is: <strong><?= $osb[way][name] ?> (<?=$osb[way][osm_id] ?>)</st
 
 The <?= OSB_MAX_NODES_EXPAND ?> closest nodes are:
 
+<ul>
+								     
+<? 
+for($i = 0; $i < OSB_MAX_NODES_EXPAND && $i < count($osb[all_nodes]); $i++) {
+  $n = $osb[all_nodes][$i];
+
+  printf('<LI><a href="http://maps.google.com/maps?q=%f,%f">%s</a> (%d meters away): %s</LI>'
+	 , $n[lat], $n[lon]
+	 , $n[id]
+	 , $n[dist]
+	 , join(", ", array_map(create_function('$w', 'return $w[name];'), $n[all_ways]))
+	 );
+}
+?>
+
+
+</ul>
 
 
 <p>Final Answer: <strong><?= osb_simple($osb); ?></strong></p>

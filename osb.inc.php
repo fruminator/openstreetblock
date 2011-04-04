@@ -152,8 +152,6 @@ function node_intersection_name($node) {
 }
 
 function osb_simple($osb) {
-  $way_name = create_function('$w', 'return $w[name];');
-  
   return(sprintf("%s %s %s", $osb[way][name]
 		 , count($osb[nodes]) == 1 ? '@' : 'bet.'
 		 , join(" & ", array_map(create_function('$n', 'return node_intersection_name($n);'), $osb[nodes]))
