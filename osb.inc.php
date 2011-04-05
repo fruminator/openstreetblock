@@ -25,11 +25,12 @@ function OpenStreetBlock($lat, $lon, $db, $max_nodes_expand = OSB_MAX_NODES_EXPA
 
   # this is not really SQL safe is it?
 try {
-  $lat = floatval($lat);
-  $lon = floatval($lon);
-  $wkt_point = sprintf("Point(%f %f)", $lon, $lat);
+  $flat = floatval($lat);
+  $flon = floatval($lon);
+  $wkt_point = sprintf("Point(%f %f)", $flon, $flat);
 } catch (Exception $e) {
-    return 'Caught exception: ',  $e->getMessage(), "\n";
+    $res['error'] = sprintf("Could not parse: %s,%s", $lat, $lon);
+    return $res;
 }
 
   # Find the way that is closes to the point in question
