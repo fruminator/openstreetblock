@@ -55,7 +55,7 @@ limit 1
   $way = $way_query->fetch(PDO::FETCH_ASSOC);
   
   if(!$way) {
-    $res['error'] = sprintf("NO WAY FOUND NEAR: %s,%s", $lat, $lon);
+    $res['error'] = sprintf("No Way Found Near (%s,%s)", $lat, $lon);
     return $res;
   }
 
@@ -152,6 +152,10 @@ function node_intersection_name($node) {
 }
 
 function osb_simple($osb) {
+  if(array_key_exists('error', $osb)) {
+    return sprintf("ERROR: %s", $osb[error]);
+  }
+
   return(sprintf("%s %s %s", $osb[way][name]
 		 , count($osb[nodes]) == 1 ? '@' : 'bet.'
 		 , join(" & ", array_map(create_function('$n', 'return node_intersection_name($n);'), $osb[nodes]))
@@ -177,6 +181,10 @@ function osb_json($osb) {
   }
 
   $x[text] = osb_simple($osb);
+
+  if(array_key_exists('error', $osb)) {
+    $x[error] = $osb[error];
+  }
 
   return json_encode($x);
 }

@@ -29,12 +29,33 @@
 <input type="submit" name="GO">
 </FORM>
 
+<? if(array_key_exists('error', $osb)) { ?>
+					 <p><B>ERROR:
+<?= htmlentities($osb[error]); ?>					 
+</p></b>
+<? } ?>
 <p>
-Closest OSM Way is: <strong><?= $osb[way][name] ?> (<?=$osb[way][osm_id] ?>)</strong> (Normalized: <?=street_norm($osb[way][name]);?>)
+Closest OSM Way is: 
+<? if(array_key_exists('way', $osb)) { ?>
+
+<strong><?= $osb[way][name] ?> (<?=$osb[way][osm_id] ?>)</strong> (Normalized: <?=street_norm($osb[way][name]);?>)
+
+<? } else { ?>
+
+NONE FOUND
+    
+<? } ?>
 </p>
 
 <p>
-   Which has <?= count($osb[node_ids]) ?> OSM nodes: (<?= join(",", $osb[node_ids]); ?>)
+   Which has <?= count($osb[node_ids]) ?> OSM nodes: 
+
+<? if(array_key_exists('node_ids', $osb)) { ?>
+(<?= join(",", $osb[node_ids]); ?>)
+    
+<? } ?>
+
+
 </p>
 
 The <?= OSB_MAX_NODES_EXPAND ?> closest nodes are:
