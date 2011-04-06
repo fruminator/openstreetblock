@@ -90,6 +90,7 @@ $service = sprintf("%s/%s", $req_dir, $script);
       The entry point to the web service is the <code><?= $script; ?></code> file.
       So, in this case, the web service is at:
   <a href="<?= $service; ?>"><?= $service; ?></a>
+  (note: this demo instance is populated only with data for Brooklyn, Queens, the Bronx, and Manhattan)
   </p>
   <p>
   The service is RESTful, so request parameters are specified in the URL.
